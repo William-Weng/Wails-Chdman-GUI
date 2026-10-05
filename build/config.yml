@@ -1,0 +1,44 @@
+version: '3'
+
+info:
+  companyName: "My Company"
+  productName: "Chdman-GUI"
+  productIdentifier: "idv.williamweng.wails-chdman-gui"
+  description: "一個使用 Wails 3、Go、Svelte 與 Less 製作的CHD檔案轉換工具"
+  copyright: "Copyright © 2026, William Weng"
+  comments: "Built with Wails, Go, Svelte"
+  version: "0.1.0"
+
+dev_mode:
+  root_path: .
+  log_level: warn
+  debounce: 1000
+  ignore:
+    dir:
+      - .git
+      - node_modules
+      - frontend
+      - bin
+    file:
+      - .DS_Store
+      - .gitignore
+      - .gitkeep
+      - "*_test.go"
+    watched_extension:
+      - "*.go"
+      - "*.js"
+      - "*.ts"
+    git_ignore: true
+  executes:
+    - cmd: wails3 build DEV=true
+      type: blocking
+    - cmd: wails3 task common:dev:frontend
+      type: background
+    - cmd: wails3 task run
+      type: primary
+      exit_policy: shutdown
+
+fileAssociations:
+
+other:
+  - name: My Other Data

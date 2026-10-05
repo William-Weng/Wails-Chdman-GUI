@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Chdman-GUI
+Comment=一個使用 Wails 3、Go、Svelte 與 Less 製作的CHD檔案轉換工具
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/ %u
+Terminal=false
+Type=Application
+Icon=
+Categories=Utility;
+StartupWMClass=
+
+ 
