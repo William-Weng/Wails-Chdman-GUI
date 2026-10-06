@@ -13,6 +13,8 @@
 
 > 本工具本身不包含 `chdman`。執行轉檔前，請先在系統中安裝 `chdman`，並確保它可從終端機的 `PATH` 找到。
 
+https://github.com/user-attachments/assets/8434fba6-7efb-45b8-b0cb-13daba588966
+
 ## 功能
 
 - 以圖形介面選擇或拖放來源檔案
