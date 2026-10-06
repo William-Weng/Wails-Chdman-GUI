@@ -73,8 +73,6 @@
       const error = err instanceof Error ? err.message : String(err);
       reset();
       await dialog("warning", "還原失敗", error);
-    } finally {
-      reset();
     }
   }
 
@@ -94,8 +92,6 @@
       const error = err instanceof Error ? err.message : String(err);
       reset();
       await dialog("warning", "壓縮失敗", error);
-    } finally {
-      reset();
     }
   }
 
