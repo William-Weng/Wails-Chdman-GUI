@@ -3,14 +3,22 @@ package backend
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"time"
 	"wails-chdman-gui/backend/utility"
 	util "wails-chdman-gui/backend/utility"
 	"wails-chdman-gui/backend/utility/platform"
+
+	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
 // ChdmanService 負責處理 CHD 相關操作，例如解析檔案路徑、Extract CD，以及 Create CD
-type ChdmanService struct{}
+type ChdmanService struct {
+	App *application.App // App 是 Wails 應用程式的實例；可用來和 Wails 的事件系統或應用程式生命週期互動
+}
+
+var extractingRegexp = regexp.MustCompile(`Extracting,\s*([0-9]+(?:\.[0-9]+)?)%\s*complete`)
+var creatingRegexp = regexp.MustCompile(`Compressing,\s*([0-9]+(?:\.[0-9]+)?)%\s*complete.*\(ratio=([0-9]+(?:\.[0-9]+)?)%\)`)
 
 // ParseFilePath 解析輸入的檔案路徑，並將目錄、檔名與副檔名包裝成 ParseFilePathResult 回傳
 func (service *ChdmanService) ParseFilePath(filepath string) ParseFilePathResult {
@@ -52,7 +60,21 @@ func (service *ChdmanService) ExtractCD(inputPath string) (string, error) {
 	err = utility.RunCommandStream(
 		cmd,
 		func(source string, text string) {
-			// fmt.Printf("[%s] %s", source, text)
+
+			if source != "stderr" {
+				return
+			}
+
+			matches := extractingRegexp.FindStringSubmatch(text)
+			if len(matches) < 2 {
+				return
+			}
+
+			progress := matches[1] + " %"
+
+			service.App.Event.Emit("extract-progress", map[string]string{
+				"progress": progress,
+			})
 		},
 	)
 
@@ -97,11 +119,28 @@ func (service *ChdmanService) CreateCD(inputPath string) (string, error) {
 	}
 
 	start := time.Now()
+	ratio := "0.0 %"
 
 	err = utility.RunCommandStream(
 		cmd,
 		func(source string, text string) {
-			// fmt.Printf("[%s] %s", source, text)
+
+			if source != "stderr" {
+				return
+			}
+
+			matches := creatingRegexp.FindStringSubmatch(text)
+			if len(matches) < 3 {
+				return
+			}
+
+			progress := matches[1] + " %"
+			ratio = matches[2] + " %"
+
+			service.App.Event.Emit("create-progress", map[string]string{
+				"progress": progress,
+				"ratio":    ratio,
+			})
 		},
 	)
 
@@ -109,6 +148,6 @@ func (service *ChdmanService) CreateCD(inputPath string) (string, error) {
 		return "", fmt.Errorf("轉檔失敗：%v", err)
 	}
 
-	message := fmt.Sprintf("耗時：%s", time.Since(start).Round(time.Millisecond))
+	message := fmt.Sprintf("耗時：%s, 壓縮率：%s", time.Since(start).Round(time.Millisecond), ratio)
 	return message, nil
 }

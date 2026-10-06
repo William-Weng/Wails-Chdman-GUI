@@ -1,13 +1,13 @@
 version: '3'
 
 info:
-  companyName: "My Company"
+  companyName: "William-Weng"
   productName: "Chdman-GUI"
   productIdentifier: "idv.williamweng.wails-chdman-gui"
   description: "一個使用 Wails 3、Go、Svelte 與 Less 製作的CHD檔案轉換工具"
   copyright: "Copyright © 2026, William Weng"
   comments: "Built with Wails, Go, Svelte"
-  version: "0.1.0"
+  version: "0.2.0"
 
 dev_mode:
   root_path: .

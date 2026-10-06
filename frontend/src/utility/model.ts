@@ -20,3 +20,23 @@ type SlotId = "leftSlot" | "rightSlot";
 type ImageDroppedData = {
   path: string;
 };
+
+/**
+ * CHD 解壓縮（Extracting）時的進度資料
+ *
+ * - progress：進度
+ */
+type ExtractProgress = {
+  progress: string;
+}
+
+/**
+ * CHD 建立／壓縮（Compressing）時的進度資料
+ *
+ * - progress：進度
+ * - ratio：壓縮比例
+ */
+type CreateProgress = {
+  progress: string;
+  ratio: string;
+}
