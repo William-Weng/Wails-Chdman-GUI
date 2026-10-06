@@ -116,7 +116,7 @@
   /**
    * 停用 WebView 內的預設右鍵選單
    */
-  function disableContextMenu(event: any): void {
+  function disableContextMenu(event: MouseEvent): void {
     event.preventDefault();
   }
 
