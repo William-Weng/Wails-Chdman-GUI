@@ -3,6 +3,7 @@
   import { Events } from "@wailsio/runtime";
   import { ParseFilePath, ExtractCD, CreateCD } from "../bindings/wails-chdman-gui/backend/chdmanservice";
   import { dialog } from "./utility/dialog";
+  import { disableContextMenu, disableCtrlWheel, disableZoomKey } from "./utility/system";
 
   let isLoading = false;
   let imageName = "Empty.png";
@@ -22,13 +23,14 @@
       void parseCreateProgress(event.data as CreateProgress);
     });
 
-    window.addEventListener("contextmenu", disableContextMenu);
+    window.addEventListener("contextmenu", (event) => { disableContextMenu(event) }, { passive: false });
+    window.addEventListener('wheel', (event) => { disableCtrlWheel(event) }, { passive: false });
+    window.addEventListener('keydown', (event) => { disableZoomKey(event) }, { passive: false });
 
     return () => {
       unsubscribeDrop();
       unsubscribeCreate();
       unsubscribeExtract();
-      window.removeEventListener("contextmenu", disableContextMenu);
     };
   });
 
@@ -110,13 +112,6 @@
   }
 
   /**
-   * 停用 WebView 內的預設右鍵選單
-   */
-  function disableContextMenu(event: MouseEvent): void {
-    event.preventDefault();
-  }
-
-  /**
    * 將畫面狀態還原為閒置狀態
    */
   function reset(): void {
@@ -127,7 +122,7 @@
 
 <main>
     <section data-file-drop-target>
-        <img src={imageName} alt="輸入圖片預覽" />
+        <img src={imageName} alt="輸入圖片預覽" draggable="false"/>
         {#if isLoading}
             <img class="loading-gif" src="Loading.gif" alt="處理中"/>
             <div class="loading-progress">{progress}</div>
