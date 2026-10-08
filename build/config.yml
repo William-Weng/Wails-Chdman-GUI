@@ -7,7 +7,7 @@ info:
   description: "一個使用 Wails 3、Go、Svelte 與 Less 製作的CHD檔案轉換工具"
   copyright: "Copyright © 2026, William Weng"
   comments: "Built with Wails, Go, Svelte"
-  version: "0.2.0"
+  version: "0.2.1"
 
 dev_mode:
   root_path: .
