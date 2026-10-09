@@ -1,10 +1,10 @@
 {
 	"fixed": {
-		"file_version": "0.2.1"
+		"file_version": "0.3.0"
 	},
 	"info": {
 		"0000": {
-			"ProductVersion": "0.2.1",
+			"ProductVersion": "0.3.0",
 			"CompanyName": "William-Weng",
 			"FileDescription": "一個使用 Wails 3、Go、Svelte 與 Less 製作的CHD檔案轉換工具",
 			"LegalCopyright": "Copyright © 2026, William Weng",

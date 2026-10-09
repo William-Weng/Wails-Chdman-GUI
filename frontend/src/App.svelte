@@ -46,10 +46,12 @@
 
     imageName = "Empty.png";
 
+    console.log(`info = ${info.ext}`)
+
     try {
       switch (extension) {
-        case ".chd": case ".iso": await extractCD(data.path); break;
-        case ".cue": await createCD(data.path); break;
+        case ".chd": await extractCD(data.path); break;
+        case ".cue": case ".iso": await createCD(data.path); break;
         default: await dialog("warning", "不支援的檔案", `目前不支援「${extension || "無副檔名"}」格式。`); break;
       }
     } catch (err) {
