@@ -13,7 +13,7 @@
 
 > 本工具本身不包含 `chdman`。執行轉檔前，請先在系統中安裝 `chdman`，並確保它可從終端機的 `PATH` 找到。
 
-https://github.com/user-attachments/assets/8434fba6-7efb-45b8-b0cb-13daba588966sou
+https://github.com/user-attachments/assets/8434fba6-7efb-45b8-b0cb-13daba588966
 
 ## 功能
 
@@ -22,9 +22,7 @@ https://github.com/user-attachments/assets/8434fba6-7efb-45b8-b0cb-13daba588966s
 - 即時顯示 `chdman` 的標準輸出與錯誤輸出
 - 支援長時間轉檔工作
 - 轉檔時顯示 loading 狀態
-- 可保留並顯示 CLI 原始輸出，包括 `\n`、`\r` 與 `\r\n`
 - 使用 Go `context.Context` 管理外部程序生命週期
-- 支援後續加入取消轉檔與進度條功能
 
 ## [建置指令整理](https://v3.wails.io/zh-tw/guides/build/building/)
 
