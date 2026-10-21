@@ -15,6 +15,13 @@ import { Call as $Call, CancellablePromise as $CancellablePromise } from "@wails
 import * as $models from "./models.js";
 
 /**
+ * Cancel 供 Wails 前端呼叫，主動停止目前正在執行的 chdman 任務
+ */
+export function Cancel(): $CancellablePromise<void> {
+    return $Call.ByID(1444985050);
+}
+
+/**
  * CreateCD 使用 chdman 的 createcd 指令，將 ISO/CUE/BIN 檔案建立成 CHD 檔案
  * 
  * 回傳值：

@@ -180,7 +180,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "idv.williamweng.wails-chdman-gui";
+				PRODUCT_BUNDLE_IDENTIFIER = "idv.william-weng.wails-chdman-gui";
 				PRODUCT_NAME = "Chdman-GUI";
 				CODE_SIGNING_ALLOWED = NO;
 				SDKROOT = iphoneos;
@@ -196,7 +196,7 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "idv.williamweng.wails-chdman-gui";
+				PRODUCT_BUNDLE_IDENTIFIER = "idv.william-weng.wails-chdman-gui";
 				PRODUCT_NAME = "Chdman-GUI";
 				CODE_SIGNING_ALLOWED = NO;
 				SDKROOT = iphoneos;

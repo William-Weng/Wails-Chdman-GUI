@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Chdman-GUI
+Exec=Chdman-GUI
+Icon=Chdman-GUI
+Categories=Development;
+Terminal=false
+Keywords=wails
+Version=1.0
+StartupNotify=false

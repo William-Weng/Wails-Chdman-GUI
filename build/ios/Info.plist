@@ -9,15 +9,15 @@
 		<key>CFBundleGetInfoString</key>
 		<string>Built with Wails, Go, Svelte</string>
 		<key>CFBundleIdentifier</key>
-		<string>idv.williamweng.wails-chdman-gui</string>
+		<string>idv.william-weng.wails-chdman-gui</string>
 		<key>CFBundleName</key>
 		<string>Chdman-GUI</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
-		<string>0.3.1</string>
+		<string>0.3.2</string>
 		<key>CFBundleVersion</key>
-		<string>0.3.1</string>
+		<string>0.3.2</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>MinimumOSVersion</key>

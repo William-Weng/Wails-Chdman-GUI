@@ -13,7 +13,7 @@
 
 > 本工具本身不包含 `chdman`。執行轉檔前，請先在系統中安裝 `chdman`，並確保它可從終端機的 `PATH` 找到。
 
-https://github.com/user-attachments/assets/8434fba6-7efb-45b8-b0cb-13daba588966
+https://github.com/user-attachments/assets/8434fba6-7efb-45b8-b0cb-13daba588966sou
 
 ## 功能
 
@@ -35,8 +35,8 @@ https://github.com/user-attachments/assets/8434fba6-7efb-45b8-b0cb-13daba588966
 | 更新 Windows 與 macOS 專用圖示檔案 | `wails3 generate icons -input build/appicon.png -windowsfilename build/windows/icon.ico -macfilename build/darwin/icons.icns` |
 | 更新建置資源 | `wails3 update build-assets -config build/config.yml -dir build` |
 | 拉取（下載）用於跨平台交叉編譯的 Docker 映像檔 | `wails3 task setup:docker` |
-| 建置 Windows x64 | `wails3 build GOOS=windows GOARCH=amd64` |
 | 打包 macOS arm64 | `wails3 package GOOS=darwin GOARCH=arm64` |
+| 建置 Windows x64 | `wails3 build GOOS=windows GOARCH=amd64` |
 | 打包 Linux arm64 | `wails3 build GOOS=linux GOARCH=arm64` |
 
 ## 安裝 chdman

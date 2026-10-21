@@ -1,9 +1,12 @@
 package backend
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"regexp"
+	"sync"
 	"time"
 	"wails-chdman-gui/backend/utility"
 	util "wails-chdman-gui/backend/utility"
@@ -14,11 +17,20 @@ import (
 
 // ChdmanService 負責處理 CHD 相關操作，例如解析檔案路徑、Extract CD，以及 Create CD
 type ChdmanService struct {
-	App *application.App // App 是 Wails 應用程式的實例；可用來和 Wails 的事件系統或應用程式生命週期互動
+	App    *application.App
+	mutex  sync.Mutex
+	cancel context.CancelFunc
 }
 
 var extractingRegexp = regexp.MustCompile(`Extracting,\s*([0-9]+(?:\.[0-9]+)?)%\s*complete`)
 var creatingRegexp = regexp.MustCompile(`Compressing,\s*([0-9]+(?:\.[0-9]+)?)%\s*complete.*\(ratio=([0-9]+(?:\.[0-9]+)?)%\)`)
+
+// ServiceShutdown 是 Wails v3 的 service lifecycle hook
+//
+// 當 Wails App 關閉時會自動呼叫，例如使用者按下視窗 X、Cmd+Q 或系統登出；這裡取消目前任務的 context，讓 exec.CommandContext 終止還在執行的 FFmpeg
+func (service *ChdmanService) ServiceShutdown() error {
+	return service.Cancel()
+}
 
 // ParseFilePath 解析輸入的檔案路徑，並將目錄、檔名與副檔名包裝成 ParseFilePathResult 回傳
 func (service *ChdmanService) ParseFilePath(filepath string) ParseFilePathResult {
@@ -30,12 +42,14 @@ func (service *ChdmanService) ParseFilePath(filepath string) ParseFilePathResult
 func (service *ChdmanService) ExtractCD(inputPath string) (string, error) {
 
 	dir, fileName, _ := util.ParseFilePath(inputPath)
+	_ = service.Cancel()
 
 	if err := util.CheckInputFile(inputPath); err != nil {
 		return "", fmt.Errorf("輸入檔案錯誤：%v", err)
 	}
 
 	ctx, cancel := util.CreateCancelContext(0)
+	service.cancel = cancel
 	defer cancel()
 
 	command := platform.CmdName()
@@ -94,12 +108,14 @@ func (service *ChdmanService) ExtractCD(inputPath string) (string, error) {
 func (service *ChdmanService) CreateCD(inputPath string) (string, error) {
 
 	dir, fileName, _ := util.ParseFilePath(inputPath)
+	_ = service.Cancel()
 
 	if err := util.CheckInputFile(inputPath); err != nil {
 		return "", fmt.Errorf("輸入檔案錯誤：%v", err)
 	}
 
 	ctx, cancel := util.CreateCancelContext(0)
+	service.cancel = cancel
 	defer cancel()
 
 	command := platform.CmdName()
@@ -150,4 +166,18 @@ func (service *ChdmanService) CreateCD(inputPath string) (string, error) {
 
 	message := fmt.Sprintf("耗時：%s, 壓縮率：%s", time.Since(start).Round(time.Millisecond), ratio)
 	return message, nil
+}
+
+// Cancel 供 Wails 前端呼叫，主動停止目前正在執行的 chdman 任務
+func (service *ChdmanService) Cancel() error {
+
+	service.mutex.Lock()
+	defer service.mutex.Unlock()
+
+	if service.cancel != nil {
+		service.cancel()
+		return nil
+	}
+
+	return errors.New("no running compose task")
 }
