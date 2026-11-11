@@ -8,8 +8,6 @@
 		<string>Built with Wails, Go, Svelte</string>
 		<key>CFBundleIconFile</key>
 		<string>icons</string>
-		<key>CFBundleIconName</key>
-		<string>appicon</string>
 		<key>CFBundleIdentifier</key>
 		<string>idv.william-weng.wails-chdman-gui</string>
 		<key>CFBundleName</key>
@@ -17,9 +15,9 @@
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
-		<string>0.3.2</string>
+		<string>0.4.0</string>
 		<key>CFBundleVersion</key>
-		<string>20261021</string>
+		<string>20261111</string>
 		<key>LSMinimumSystemVersion</key>
 		<string>12.0.0</string>
 		<key>NSAppTransportSecurity</key>

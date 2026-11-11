@@ -142,6 +142,20 @@ xattr -cr "/Applications/Chdman-GUI.app"
 
 如果應用程式不在 `/Applications`，請將路徑替換成實際位置。
 
+## 常用指令
+
+| 目的 | 指令 |
+| --- | --- |
+| 查看 `.chd` 壓縮資訊 | `chdman info -i "SS.chd"` |
+| 將 `.chd` 還原成 `.cue` CD光碟映像檔 | `chdman extractcd -i "PS1.chd" -o "PS1.cue" -ob "PS1.bin"` |
+| 將 `.chd` 還原成 `.iso` DVD光碟映像檔 | `chdman extractdvd -i "PS2.chd" -o "PS2.iso"` |
+| 將 `.cue` 壓縮成 `.chd` CD 映像檔 | `chdman createcd -f -i "CD.cue" -o "CD.chd"` |
+| 將 `.iso` 壓縮成 `.chd` DVD 映像檔 | `chdman createdvd -f -i "DVD.iso" -o "DVD.chd"` |
+| 將資料夾變成 ISO 檔 | `hdiutil makehybrid -iso -udf -o "game.iso" "./Game"` |
+| 使用軟連結指向其他資料夾 | `ln -s "/Volumes/MAME/Roms" "~/Library/Application Support/FinalBurn Neo/ROMs"` |
+
+> 如果`.chd`是轉成`.bin`, 但又確定它是`DVD`的話，可以改副檔名為`.iso`轉檔試試看。
+
 ## 注意事項
 
 - 本專案不提供 ROM、BIOS、CHD、ISO、BIN/CUE 或任何受版權保護的遊戲檔案。
