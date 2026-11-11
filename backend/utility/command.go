@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -197,4 +198,56 @@ func ReadLineEnding(reader *bufio.Reader) (string, error) {
 			return string(result), nil
 		}
 	}
+}
+
+// 依據輸入映像與是否為 DVD，產生呼叫 chdman 建立 .chd 檔所需的命令列參數
+//
+// inputPath: 原始映像檔路徑，例如 .cue、.iso 等
+// dir:       輸出 .chd 檔所在目錄
+// fileName:  輸出檔名，不含副檔名
+// useDVD:    true 表示 DVD 映像；false 表示 CD 映像
+func CreateArgs(inputPath string, dir string, fileName string, useDVD bool) []string {
+
+	cmd := "createcd"
+	if useDVD {
+		cmd = "createdvd"
+	}
+
+	outputPath := filepath.Join(dir, fileName+".chd")
+
+	return []string{
+		cmd,
+		"-f",
+		"-i", inputPath,
+		"-o", outputPath,
+	}
+}
+
+// ExtractArgs 依據 CHD 的媒體類型，產生呼叫 chdman 還原原始映像所需的命令列參數。
+//
+// inputPath: 來源 CHD 檔路徑
+// dir:       還原後檔案的輸出目錄
+// fileName:  輸出檔名，不含副檔名
+// useDVD:    true 表示 DVD 型 CHD；false 表示 CD 型 CHD
+//
+// CD 型 CHD 會還原為：
+//
+//	<dir>/<fileName>.cue
+//	<dir>/<fileName>.bin
+//
+// DVD 型 CHD 會還原為：
+//
+//	<dir>/<fileName>.iso
+func ExtractArgs(inputPath string, dir string, fileName string, useDVD bool) []string {
+
+	outputPath := filepath.Join(dir, fileName+".cue")
+	if useDVD {
+		outputPath = filepath.Join(dir, fileName+".iso")
+	}
+
+	if useDVD {
+		return []string{"extractdvd", "-f", "-i", inputPath, "-o", outputPath}
+	}
+
+	return []string{"extractcd", "-f", "-i", inputPath, "-o", outputPath, "-ob", filepath.Join(dir, fileName+".bin")}
 }

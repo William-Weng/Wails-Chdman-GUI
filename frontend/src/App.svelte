@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { Events } from "@wailsio/runtime";
-  import { ParseFilePath, ExtractCD, CreateCD } from "../bindings/wails-chdman-gui/backend/chdmanservice";
+  import { ParseFilePath, CheckDVD, ExtractCD, CreateCD } from "../bindings/wails-chdman-gui/backend/chdmanservice";
   import { dialog } from "./utility/dialog";
   import { disableContextMenu, disableCtrlWheel, disableZoomKey } from "./utility/system";
 
@@ -46,12 +46,11 @@
 
     imageName = "Empty.png";
 
-    console.log(`info = ${info.ext}`)
-
     try {
       switch (extension) {
         case ".chd": await extractCD(data.path); break;
-        case ".cue": case ".iso": case ".gdi": await createCD(data.path); break;
+        case ".cue": case ".gdi": await createCD(data.path, false); break;
+        case ".iso": await createCD(data.path, true); break;
         default: await dialog("warning", "不支援的檔案", `目前不支援「${extension || "無副檔名"}」格式。`); break;
       }
     } catch (err) {
@@ -67,10 +66,12 @@
   async function extractCD(filePath: string) {
 
     isLoading = true;
-    imageName = "DVD.png";
+    imageName = "CD.png";
 
     try {
-      const messsage = await ExtractCD(filePath);
+      const useDVD = await CheckDVD(filePath)
+      if (useDVD) { imageName = "DVD.png"; }
+      const messsage = await ExtractCD(filePath, useDVD);
       reset();
       await dialog("info", "還原完成", messsage);
     } catch (err) {
@@ -83,13 +84,13 @@
   /**
    * 從 CUE/BIN 建立 CHD
    */
-  async function createCD(filePath: string) {
+  async function createCD(filePath: string, useDVD: boolean) {
 
     imageName = "PCSX2.png";
     isLoading = true;
 
     try {
-      const messsage = await CreateCD(filePath);
+      const messsage = await CreateCD(filePath, useDVD);
       reset();
       await dialog("info", "壓縮完成", messsage);
     } catch (err) {

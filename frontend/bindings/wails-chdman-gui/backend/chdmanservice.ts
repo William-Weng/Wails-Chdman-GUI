@@ -22,21 +22,36 @@ export function Cancel(): $CancellablePromise<void> {
 }
 
 /**
+ * 檢查指定的 CHD 檔是否為 DVD-ROM 型 CHD => chdman info -i <chdPath>
+ * 
+ * 參數:
+ *   - chdPath: CHD 檔的完整路徑
+ * 
+ * 回傳值：
+ *   - true：CHD 的 metadata tag 為 "DVD "，代表 DVD-ROM CHD
+ *   - false：不是 DVD 型 CHD，通常可視為 CD 型 CHD
+ *   - error：無法執行 chdman、讀取輸出，或 CHD 檔無效
+ */
+export function CheckDVD(chdPath: string): $CancellablePromise<boolean> {
+    return $Call.ByID(2504921254, chdPath);
+}
+
+/**
  * CreateCD 使用 chdman 的 createcd 指令，將 ISO/CUE/BIN 檔案建立成 CHD 檔案
  * 
  * 回傳值：
  *   - string：執行成功後的訊息，例如處理耗時
  *   - error：執行過程中發生的錯誤
  */
-export function CreateCD(inputPath: string): $CancellablePromise<string> {
-    return $Call.ByID(2256728819, inputPath);
+export function CreateCD(inputPath: string, useDVD: boolean): $CancellablePromise<string> {
+    return $Call.ByID(2256728819, inputPath, useDVD);
 }
 
 /**
  * 使用 chdman 的 extractcd 指令，將 CHD 檔案解開成 CUE/BIN 檔案
  */
-export function ExtractCD(inputPath: string): $CancellablePromise<string> {
-    return $Call.ByID(1939252694, inputPath);
+export function ExtractCD(inputPath: string, useDVD: boolean): $CancellablePromise<string> {
+    return $Call.ByID(1939252694, inputPath, useDVD);
 }
 
 /**

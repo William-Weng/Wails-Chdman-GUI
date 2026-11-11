@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"path/filepath"
+	"os/exec"
 	"regexp"
+	"strings"
 	"sync"
 	"time"
 	"wails-chdman-gui/backend/utility"
@@ -39,7 +40,7 @@ func (service *ChdmanService) ParseFilePath(filepath string) ParseFilePathResult
 }
 
 // 使用 chdman 的 extractcd 指令，將 CHD 檔案解開成 CUE/BIN 檔案
-func (service *ChdmanService) ExtractCD(inputPath string) (string, error) {
+func (service *ChdmanService) ExtractCD(inputPath string, useDVD bool) (string, error) {
 
 	dir, fileName, _ := util.ParseFilePath(inputPath)
 	_ = service.Cancel()
@@ -52,18 +53,12 @@ func (service *ChdmanService) ExtractCD(inputPath string) (string, error) {
 	service.cancel = cancel
 	defer cancel()
 
+	args := utility.ExtractArgs(inputPath, dir, fileName, useDVD)
+
+	fmt.Print(args)
+
 	command := platform.CmdName()
-	cmd, err := utility.CreateCommandContext(
-		ctx,
-		command,
-		[]string{
-			"extractcd",
-			"-f",
-			"-i", inputPath,
-			"-o", filepath.Join(dir, fileName+".cue"),
-			"-ob", filepath.Join(dir, fileName+".bin"),
-		},
-	)
+	cmd, err := utility.CreateCommandContext(ctx, command, args)
 
 	if err != nil {
 		return "", fmt.Errorf("建立指令失敗：%v", err)
@@ -105,7 +100,7 @@ func (service *ChdmanService) ExtractCD(inputPath string) (string, error) {
 // 回傳值：
 //   - string：執行成功後的訊息，例如處理耗時
 //   - error：執行過程中發生的錯誤
-func (service *ChdmanService) CreateCD(inputPath string) (string, error) {
+func (service *ChdmanService) CreateCD(inputPath string, useDVD bool) (string, error) {
 
 	dir, fileName, _ := util.ParseFilePath(inputPath)
 	_ = service.Cancel()
@@ -118,17 +113,9 @@ func (service *ChdmanService) CreateCD(inputPath string) (string, error) {
 	service.cancel = cancel
 	defer cancel()
 
+	args := utility.CreateArgs(inputPath, dir, fileName, useDVD)
 	command := platform.CmdName()
-	cmd, err := utility.CreateCommandContext(
-		ctx,
-		command,
-		[]string{
-			"createcd",
-			"-f",
-			"-i", inputPath,
-			"-o", filepath.Join(dir, fileName+".chd"),
-		},
-	)
+	cmd, err := utility.CreateCommandContext(ctx, command, args)
 
 	if err != nil {
 		return "", fmt.Errorf("建立指令失敗：%v", err)
@@ -180,4 +167,25 @@ func (service *ChdmanService) Cancel() error {
 	}
 
 	return errors.New("no running compose task")
+}
+
+// 檢查指定的 CHD 檔是否為 DVD-ROM 型 CHD => chdman info -i <chdPath>
+//
+// 參數:
+//   - chdPath: CHD 檔的完整路徑
+//
+// 回傳值：
+//   - true：CHD 的 metadata tag 為 "DVD "，代表 DVD-ROM CHD
+//   - false：不是 DVD 型 CHD，通常可視為 CD 型 CHD
+//   - error：無法執行 chdman、讀取輸出，或 CHD 檔無效
+func (service *ChdmanService) CheckDVD(chdPath string) (bool, error) {
+
+	command := platform.CmdName()
+	out, err := exec.Command(command, "info", "-i", chdPath).Output()
+
+	if err != nil {
+		return false, fmt.Errorf("無法讀取 CHD 資訊: %w", err)
+	}
+
+	return strings.Contains(string(out), "Tag='DVD '"), nil
 }
