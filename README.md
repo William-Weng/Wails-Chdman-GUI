@@ -2,7 +2,7 @@
 
 ![Go](https://img.shields.io/badge/Go-1.27.1-00ADD8?logo=go&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20.19.2-339933?logo=nodedotjs&logoColor=white)
-![Wails](https://img.shields.io/badge/Wails-v3.0.0--beta.26-DF0000?logo=wails&logoColor=white)
+![Wails](https://img.shields.io/badge/Wails-v3.0.0-DF0000?logo=wails&logoColor=white)
 ![LICENSE](https://img.shields.io/github/license/William-Weng/Wails-Chdman-GUI?style=flat&label=LICENSE&color=yellow)
 ![Tag](https://img.shields.io/github/v/tag/William-Weng/Wails-Chdman-GUI?style=flat&label=Tag)
 ![Stars](https://img.shields.io/github/stars/William-Weng/Wails-Chdman-GUI?style=flat&label=Stars)
