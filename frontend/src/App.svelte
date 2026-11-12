@@ -50,7 +50,7 @@
       switch (extension) {
         case ".chd": await extractCD(data.path); break;
         case ".cue": case ".gdi": await createCD(data.path, false); break;
-        case ".iso": await createCD(data.path, true); break;
+        case ".iso": case ".bin": await createCD(data.path, true); break;
         default: await dialog("warning", "不支援的檔案", `目前不支援「${extension || "無副檔名"}」格式。`); break;
       }
     } catch (err) {
