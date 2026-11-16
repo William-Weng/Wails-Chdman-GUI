@@ -9,7 +9,7 @@
 
 一個使用 **Wails + Go + Svelte** 開發的 CHD 轉檔桌面工具。
 
-本專案透過 [`chdman`](https://chdman.com/) 指令執行 CHD（Compressed Hunks of Data）相關轉檔工作，提供圖形化介面，讓使用者不必手動輸入長串終端機指令即可處理遊戲映像檔。
+本專案透過 [`chdman`](https://onionui.github.io/docs/advanced/chdman) 指令執行 CHD（Compressed Hunks of Data）相關轉檔工作，提供圖形化介面，讓使用者不必手動輸入長串終端機指令即可處理遊戲映像檔。
 
 > 本工具本身不包含 `chdman`。執行轉檔前，請先在系統中安裝 `chdman`，並確保它可從終端機的 `PATH` 找到。
 
